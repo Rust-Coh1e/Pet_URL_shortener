@@ -2,13 +2,19 @@ package main
 
 import (
 	"fmt"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
+	_ "url-shortener/docs"
 	"url-shortener/handler"
 	"url-shortener/ratelimit"
 	"url-shortener/repository"
 	"url-shortener/storage"
 )
 
+// @title          URL Shortener API
+// @version        1.0
+// @description    Сервис сокращения ссылок
+// @host           localhost:8080
 func main() {
 	fmt.Println("Starting...")
 
@@ -28,6 +34,7 @@ func main() {
 
 	mux.HandleFunc("/shorten", handler.RateLimit(rl, mainHandler.Shorten))
 	mux.HandleFunc("/", handler.RateLimit(rl, mainHandler.GetURL))
+	mux.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 
 	http.ListenAndServe(":8080", mux)
 }

@@ -30,6 +30,16 @@ type ShortenTaskReq struct {
 	URL string `json:"url"`
 }
 
+// Shorten godoc
+// @Summary      Сократить URL
+// @Description  Принимает оригинальный URL и возвращает короткий
+// @Tags         urls
+// @Accept       json
+// @Produce      json
+// @Param        request body ShortenTaskReq true "URL для сокращения"
+// @Success      201 {string} string "короткий ID"
+// @Failure      400 {string} string "Invalid JSON"
+// @Router       /shorten [post]
 func (h *Handler) Shorten(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "Application/json")
@@ -63,6 +73,15 @@ func (h *Handler) Shorten(w http.ResponseWriter, r *http.Request) {
 	// Save
 }
 
+// GetURL godoc
+// @Summary      Редирект по короткой ссылке
+// @Description  Принимает короткий ID и редиректит на оригинальный URL
+// @Tags         urls
+// @Param        id path string true "Короткий ID"
+// @Success      301 {string} string "Редирект"
+// @Failure      404 {string} string "Not found"
+// @Failure      500 {string} string "Internal error"
+// @Router       /{id} [get]
 func (h *Handler) GetURL(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "Application/json")
 

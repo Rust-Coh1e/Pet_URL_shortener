@@ -3,6 +3,7 @@ package repository //наверно он должен называться repos
 import (
 	"database/sql"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"time"
 	"url-shortener/storage"
 )
 
@@ -19,6 +20,9 @@ func NewDB(connString string) (*DB, error) {
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
+	db.SetMaxOpenConns(25)
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute)
 
 	query := `
     CREATE TABLE IF NOT EXISTS urls (
@@ -74,4 +78,8 @@ func (db *DB) IncrementClick(id string) error {
 		return err
 	}
 	return nil
+}
+
+func (db *DB) Close() {
+	db.conn.Close()
 }

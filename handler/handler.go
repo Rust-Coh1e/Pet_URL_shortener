@@ -69,8 +69,12 @@ func (h *Handler) Shorten(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(shortURL)
+	// json.NewEncoder(w).Encode(shortURL)
 	// Save
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"id": shortURL,
+	})
 }
 
 // GetURL godoc
